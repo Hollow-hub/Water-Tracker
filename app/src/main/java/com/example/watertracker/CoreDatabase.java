@@ -31,8 +31,9 @@ public class CoreDatabase extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+    public void onUpgrade(android.database.sqlite.SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("DROP TABLE IF EXISTS `DB_TABLE`");
+        onCreate(db);
     }
 
     public void insertUsername(String username) {

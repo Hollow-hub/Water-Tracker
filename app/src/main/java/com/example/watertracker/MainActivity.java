@@ -22,8 +22,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        TextView username = (TextView) findViewById(R.id.nickname);
-        TextView login = (TextView) findViewById(R.id.signin);
+//        TextView username = (TextView) findViewById(R.id.nickname);
+//        TextView login = (TextView) findViewById(R.id.signin);
 
 
         if (!db.Usernames_is_empty()) {
@@ -32,12 +32,11 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
         nameInput = findViewById(R.id.nickname);
-
         configureNextButton();
 
     }
     private void configureNextButton(){
-        Button nextButton = (Button) findViewById(R.id.loginbtn);
+        Button nextButton = findViewById(R.id.loginbtn);
         nextButton.setOnClickListener(v -> {
             if (TextUtils.isEmpty(nameInput.getText().toString())){
                 Toast.makeText(MainActivity.this, "Make sure to write a nickname", Toast.LENGTH_LONG).show();

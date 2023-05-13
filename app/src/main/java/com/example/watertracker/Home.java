@@ -1,4 +1,6 @@
 package com.example.watertracker;
 
-public class Home {
+import androidx.appcompat.app.AppCompatActivity;
+
+public class Home extends AppCompatActivity {
 }
