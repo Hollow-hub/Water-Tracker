@@ -2,10 +2,15 @@ package com.example.watertracker;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class CoreDatabase extends SQLiteOpenHelper {
     static final private String DATABASE_NAME = "WaterTracker.db";
@@ -31,17 +36,32 @@ public class CoreDatabase extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+    public void onUpgrade(android.database.sqlite.SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("DROP TABLE IF EXISTS `DB_TABLE`");
+        onCreate(db);
     }
 
     public void insertUsername(String username) {
         this.db = this.getWritableDatabase();
-//        db.execSQL("INSERT INTO TABLE_NAME (value) VALUES ('"+username+"');");
         // insert username into database
         db.execSQL("INSERT INTO " + TABLE_USERNAMES + " (username) VALUES ('" + username + "');");
         //db.close();
         lastUsername = username;
+    }
+
+    public void insertHabit(String habitName, int habitCount) {
+        this.db = this.getWritableDatabase();
+        String date = getDateTime();
+        db.execSQL("INSERT INTO " + TABLE_RECORD + " ('habit name', 'habit count', 'date') VALUES " +
+                "('" + habitName + "', '" + habitCount + "', '" + date + "');");
+        //db.close();
+    }
+
+    public String getDateTime() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(
+                "yyyy-MM-dd", Locale.getDefault());
+        Date date = new Date();
+        return dateFormat.format(date);
     }
 
 
