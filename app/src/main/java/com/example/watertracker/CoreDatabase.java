@@ -23,6 +23,11 @@ public class CoreDatabase extends SQLiteOpenHelper {
     SQLiteDatabase db;
 
 
+
+    public void setLastUsername(String username) {
+        this.lastUsername = username;
+    }
+
     public CoreDatabase(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.context = context;
@@ -65,6 +70,11 @@ public class CoreDatabase extends SQLiteOpenHelper {
     }
 
 
+    public String getName() {
+        return lastUsername;
+    }
+
+
     public Boolean Usernames_is_empty() {
         this.db = this.getReadableDatabase();
         boolean empty = true;
@@ -76,5 +86,15 @@ public class CoreDatabase extends SQLiteOpenHelper {
 
         return empty;
 
+    }
+
+    public String getUsername(){
+        this.db = this.getReadableDatabase();
+        Cursor cur = db.rawQuery("SELECT * FROM " + TABLE_USERNAMES,null);
+        String name = "";
+        if (cur != null && cur.moveToFirst()){
+            name = cur.getString(0);
+        }
+        return name;
     }
 }

@@ -9,16 +9,17 @@
     <ProgressBar
         android:id="@+id/progress_bar"
         style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
-        android:layout_width="315dp"
-        android:layout_height="154dp"
+        android:layout_width="wrap_content"
+        android:layout_height="16dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="48dp"
-        android:layout_marginTop="349dp"
+        android:layout_marginTop="418dp"
         android:layout_marginEnd="48dp"
-        android:layout_marginBottom="228dp" />
+        android:layout_marginBottom="297dp"
+        android:progressDrawable="@drawable/custom_prog_bg" />
 
     <TextView
         android:id="@+id/textView3"
@@ -63,7 +64,7 @@
         app:layout_constraintVertical_bias="0.868" />
 
     <Button
-        android:id="@+id/settings"
+        android:id="@+id/add"
         android:layout_width="45dp"
         android:layout_height="45dp"
         android:layout_alignParentStart="true"

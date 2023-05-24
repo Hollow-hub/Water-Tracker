@@ -22,13 +22,19 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+//        db.close();
+//        this.deleteDatabase(db.getDatabaseName());
+
 //        TextView username = (TextView) findViewById(R.id.nickname);
 //        TextView login = (TextView) findViewById(R.id.signin);
 
 
-        if (!db.Usernames_is_empty()) {
-            startActivity(new Intent(MainActivity.this, Home.class));
-        }
+        // edw prepei na to dw na to ftia3w giati den anoigei
+        // mallon tha ftia3ei otan ftai3w to database na douleuei kanonika
+
+//        if (!db.Usernames_is_empty()) {
+//            startActivity(new Intent(MainActivity.this, Home.class));
+//        }
 
         setContentView(R.layout.activity_main);
         nameInput = findViewById(R.id.nickname);
@@ -45,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
                 name = nameInput.getText().toString();
                 // add nickname to database
                 // if this crushes, it's because the name exists in database
-                db.insertUsername(name);
+                //db.insertUsername(name);
                 startActivity(new Intent(MainActivity.this, MainActivity2.class));
             }
         });

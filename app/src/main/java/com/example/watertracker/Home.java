@@ -2,6 +2,7 @@ package com.example.watertracker;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -15,15 +16,37 @@ import java.util.TimerTask;
 public class Home extends AppCompatActivity {
 
 
+    CoreDatabase db;
+    private String name;
+    TextView username;
+
+
     TextView MyStats;
-    ProgressBar pb;
-    int counter = 0;
+    private ProgressBar pb;
+    private int CurrentProgress = 0;
+    private Button Add;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
 
+        name = db.getUsername();
+        username = findViewById(R.id.textView3);
+        username.setText(name);
+
+
+        pb = findViewById(R.id.progress_bar);
+        Add = findViewById(R.id.add);
+
+        Add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CurrentProgress = CurrentProgress + 10;
+                pb.setProgress(CurrentProgress);
+                pb.setMax(100);
+            }
+        });
 
 
         MyStats = findViewById(R.id.stats);
@@ -37,25 +60,6 @@ public class Home extends AppCompatActivity {
             }
         });
 
-    }
 
-    //edw prepei na to alla3w anti giaq timer na pairnei
-    //ta cups pou kanei add o xrhsths
-    public void prog(){
-        pb = (ProgressBar)findViewById(R.id.progress_bar);
-        final Timer t = new Timer();
-        TimerTask tt = new TimerTask() {
-            @Override
-            public void run() {
-                counter++;
-                pb.setProgress(counter);
-
-                if (counter == 100){
-                    t.cancel();
-                }
-            }
-        };
-
-        t.schedule(tt,0,100);
     }
 }

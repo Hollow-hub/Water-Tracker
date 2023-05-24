@@ -18,7 +18,7 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Currency;
 
-public class MainActivity2 extends AppCompatActivity {
+public class MainActivity2 extends AppCompatActivity{
 
     CoreDatabase db;
     RangeSlider rangeSliderWeight,rangeSliderActivity;
