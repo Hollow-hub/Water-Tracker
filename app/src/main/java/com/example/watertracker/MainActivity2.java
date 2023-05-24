@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -13,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.slider.LabelFormatter;
 import com.google.android.material.slider.RangeSlider;
+import com.google.android.material.slider.Slider;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -21,7 +23,7 @@ import java.util.Currency;
 public class MainActivity2 extends AppCompatActivity{
 
     CoreDatabase db;
-    RangeSlider rangeSliderWeight,rangeSliderActivity;
+    Slider rangeSliderWeight,rangeSliderActivity;
     double Weight = 40.0;
     int Activity = 1;
 
@@ -44,19 +46,17 @@ public class MainActivity2 extends AppCompatActivity{
         rangeSliderWeight = findViewById(R.id.Weight_slider);
         rangeSliderActivity = findViewById(R.id.Activity_slider);
 
-        rangeSliderWeight.addOnChangeListener(new RangeSlider.OnChangeListener() {
+        rangeSliderWeight.addOnChangeListener(new Slider.OnChangeListener() {
             @Override
-            public void onValueChange(@NonNull RangeSlider slider, float value, boolean fromUser) {
-                // Responds to when slider's value is changed
+            public void onValueChange(@NonNull Slider slider, float value, boolean fromUser) {
                 Weight = value;
                 x = 1;
             }
         });
 
-        rangeSliderActivity.addOnChangeListener(new RangeSlider.OnChangeListener() {
+        rangeSliderActivity.addOnChangeListener(new Slider.OnChangeListener() {
             @Override
-            public void onValueChange(@NonNull RangeSlider slider, float value, boolean fromUser) {
-                // Responds to when slider's value is changed
+            public void onValueChange(@NonNull Slider slider, float value, boolean fromUser) {
                 Activity = (int)value;
                 y = 1;
             }
@@ -75,7 +75,10 @@ public class MainActivity2 extends AppCompatActivity{
             if ((x | y) == 0){
                 Toast.makeText(MainActivity2.this, "Make sure to put your weight and activity level", Toast.LENGTH_LONG).show();
             }else{
-                startActivity(new Intent(MainActivity2.this, Home.class));
+                if (Weight == 0)
+                    Toast.makeText(MainActivity2.this, "Make sure not to put 0kg to your weight", Toast.LENGTH_LONG).show();
+                else
+                    startActivity(new Intent(MainActivity2.this, Home.class));
             }
         });
     }

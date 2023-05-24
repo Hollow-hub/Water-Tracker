@@ -19,8 +19,10 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".MainActivity2"/>
-        <activity android:name=".Home"/>
+        <activity android:name=".MainActivity2"
+            android:exported="false"/>
+        <activity android:name=".Home"
+            android:exported="false"/>
     </application>
 
 </manifest>

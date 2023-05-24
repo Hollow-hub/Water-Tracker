@@ -19,8 +19,6 @@ public class Home extends AppCompatActivity {
     CoreDatabase db;
     private String name;
     TextView username;
-
-
     TextView MyStats;
     private ProgressBar pb;
     private int CurrentProgress = 0;
@@ -29,7 +27,9 @@ public class Home extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        db = new CoreDatabase(this);
+        db.onCreate(db.getWritableDatabase());
+        setContentView(R.layout.home);
 
         name = db.getUsername();
         username = findViewById(R.id.textView3);
