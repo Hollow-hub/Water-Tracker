@@ -27,8 +27,8 @@ public class MainActivity extends AppCompatActivity {
         db = new CoreDatabase(this);
         db.onCreate(db.getWritableDatabase());
 
-        db.close();
-        this.deleteDatabase(db.getDatabaseName());
+//        db.close();
+//        this.deleteDatabase(db.getDatabaseName());
 
         if (!db.Usernames_is_empty()) {
             startActivity(new Intent(MainActivity.this, Home.class));
@@ -40,24 +40,6 @@ public class MainActivity extends AppCompatActivity {
         //nameInput.addTextChangedListener(loginTextWatcher);
         nextButton = findViewById(R.id.loginbtn);
     }
-
-//    private TextWatcher loginTextWatcher = new TextWatcher() {
-//        @Override
-//        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//
-//        }
-//
-//        @Override
-//        public void onTextChanged(CharSequence s, int start, int before, int count) {
-//            String nickname = nameInput.getText().toString().trim();
-//            nextButton.setEnabled(!nickname.isEmpty());
-//        }
-//
-//        @Override
-//        public void afterTextChanged(Editable s) {
-//
-//        }
-//    };
 
     private void configureNextButton(){
         nextButton = findViewById(R.id.loginbtn);

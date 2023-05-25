@@ -1,5 +1,11 @@
 package com.example.watertracker;
 
+import android.app.AlarmManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -20,7 +26,7 @@ public class Home extends AppCompatActivity {
     double cups;
     TextView textView;
     private ProgressBar pb;
-    private double CurrentProgress = 0;
+    private int CurrentProgress;
     private Button Add;
 
     @Override
@@ -38,19 +44,32 @@ public class Home extends AppCompatActivity {
         pb = findViewById(R.id.progress_bar);
         Add = findViewById(R.id.add);
 
+        createNotificationChannel();
+
         cups = db.getCups();
         textView = findViewById(R.id.textView3);
         cups = (int)cups;
-        textView.setText(String.valueOf(cups));
+        textView.setText(String.valueOf((int) cups));
+        if (!db.Record_is_empty()){
+            CurrentProgress = db.getRecord();
+            pb.setProgress(CurrentProgress);
+        }
 
 
         Add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //db.insertRecord();
                 CurrentProgress = CurrentProgress + 1;
-                pb.setProgress((int) CurrentProgress);
+                pb.setProgress(CurrentProgress);
                 pb.setMax((int) cups);
+                db.insertRecord(CurrentProgress);
+                Intent intent = new Intent(Home.this,Reminder.class);
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(Home.this,0,intent,0);
+                AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+
+                long timeAtButtonClick = System.currentTimeMillis();
+                long OneHour = 1000 * 3600;
+                alarmManager.set(AlarmManager.RTC_WAKEUP,timeAtButtonClick + OneHour,pendingIntent);
             }
         });
 
@@ -67,5 +86,18 @@ public class Home extends AppCompatActivity {
         });
 
 
+    }
+
+    private void createNotificationChannel(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            CharSequence name = "ReminderChannel";
+            String description = "Channel for Reminder";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("Notify",name,importance);
+            channel.setDescription(description);
+
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
     }
 }

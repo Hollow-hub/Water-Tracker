@@ -1,5 +1,6 @@
 package com.example.watertracker;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -19,14 +20,9 @@ public class CoreDatabase extends SQLiteOpenHelper {
     static final private String TABLE_USERNAMES = "Usernames";
     static final private String TABLE_RECORD = "DailyWaterIntake";
     static final private String TABLE_CUPS = "Cups";
-    static private String lastUsername = "";
 
     Context context;
     SQLiteDatabase db;
-
-    public void setLastUsername(String username) {
-        this.lastUsername = username;
-    }
 
     public CoreDatabase(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -36,7 +32,7 @@ public class CoreDatabase extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_USERNAMES + " (username TEXT PRIMARY KEY);");
-        db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_RECORD + " (DailyWaterIntake TEXT PRIMARY KEY);");
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_RECORD + " (DailyWater TEXT PRIMARY KEY);");
         db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_CUPS + " (Cups TEXT PRIMARY KEY);");
     }
 
@@ -59,25 +55,31 @@ public class CoreDatabase extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put("username",username);
         db.insert(TABLE_USERNAMES,null,values);
-        lastUsername = username;
     }
 
-    public void insertRecord(int waterCount, double cups) {
+    public void insertRecord(int waterCount) {
         this.db = this.getWritableDatabase();
-        String date = getDateTime();
         ContentValues values = new ContentValues();
-        values.put("daily water intake", waterCount);
-        values.put("cups", cups);
-        values.put("date", date);
+        values.put("DailyWater", waterCount);
         db.insert(TABLE_RECORD, null, values);
     }
 
 
-    public String getDateTime() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat(
-                "yyyy-MM-dd", Locale.getDefault());
-        Date date = new Date();
-        return dateFormat.format(date);
+    public Integer getRecord(){
+        this.db = this.getReadableDatabase();
+        String tableName = "DailyWaterIntake";
+        String columnName = "DailyWater";
+        Integer lastItem = null;
+
+        Cursor cursor = db.query(tableName, new String[]{columnName}, null, null, null, null, columnName + " DESC", "1");
+
+        if (cursor != null && cursor.moveToFirst()) {
+            int columnIndex = cursor.getColumnIndex(columnName);
+            lastItem = cursor.getInt(columnIndex);
+            cursor.close();
+        }
+
+        return lastItem;
     }
 
     public Double getCups(){
@@ -91,9 +93,21 @@ public class CoreDatabase extends SQLiteOpenHelper {
         return cups;
     }
 
-
-    public String getName() {
-        return lastUsername;
+    public boolean Record_is_empty() {
+        this.db = this.getReadableDatabase();
+        boolean empty = true;
+        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + TABLE_RECORD, null);
+        if (cursor != null) {
+            try {
+                if (cursor.moveToFirst()) {
+                    int count = cursor.getInt(0);
+                    empty = (count == 0);
+                }
+            } finally {
+                cursor.close();
+            }
+        }
+        return empty;
     }
 
 
