@@ -9,42 +9,48 @@ import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
+import com.google.android.material.textview.MaterialTextView;
 
 public class Home extends AppCompatActivity {
-
 
     CoreDatabase db;
     private String name;
     TextView username;
     TextView MyStats;
+    double cups;
+    TextView textView;
     private ProgressBar pb;
-    private int CurrentProgress = 0;
+    private double CurrentProgress = 0;
     private Button Add;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         db = new CoreDatabase(this);
-        db.onCreate(db.getWritableDatabase());
+        //db.onCreate(db.getWritableDatabase());
         setContentView(R.layout.home);
 
         name = db.getUsername();
-        username = findViewById(R.id.textView3);
+        username = findViewById(R.id.textViewName);
         username.setText(name);
 
 
         pb = findViewById(R.id.progress_bar);
         Add = findViewById(R.id.add);
 
+        cups = db.getCups();
+        textView = findViewById(R.id.textView3);
+        cups = (int)cups;
+        textView.setText(String.valueOf(cups));
+
+
         Add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CurrentProgress = CurrentProgress + 10;
-                pb.setProgress(CurrentProgress);
-                pb.setMax(100);
+                //db.insertRecord();
+                CurrentProgress = CurrentProgress + 1;
+                pb.setProgress((int) CurrentProgress);
+                pb.setMax((int) cups);
             }
         });
 

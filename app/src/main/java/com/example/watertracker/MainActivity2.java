@@ -26,7 +26,8 @@ public class MainActivity2 extends AppCompatActivity{
     Slider rangeSliderWeight,rangeSliderActivity;
     double Weight = 40.0;
     int Activity = 1;
-
+    Double Cups;
+    double Litre;
     int x = 0;
     int y = 0;
     ImageView imageView;
@@ -64,11 +65,9 @@ public class MainActivity2 extends AppCompatActivity{
 
         configureNextButton();
 
-        // calculate the the cups
-        double Litre = (Weight * 0.02957) + (Activity * 12 );
-        int Cups = (int) (Litre * 4.2);
 
     }
+
     private void configureNextButton(){
         Button nextButton = findViewById(R.id.buttonNext);
         nextButton.setOnClickListener(v -> {
@@ -78,6 +77,10 @@ public class MainActivity2 extends AppCompatActivity{
                 if (Weight == 0)
                     Toast.makeText(MainActivity2.this, "Make sure not to put 0kg to your weight", Toast.LENGTH_LONG).show();
                 else
+                    // calculate the the cups
+                    Litre = (Weight / 30 ) + (Activity * 0.35);
+                    Cups = (Litre * 4.2);
+                    db.insertCups(Cups);
                     startActivity(new Intent(MainActivity2.this, Home.class));
             }
         });

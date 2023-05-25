@@ -18,6 +18,7 @@ public class CoreDatabase extends SQLiteOpenHelper {
     static final private int DATABASE_VERSION = 1;
     static final private String TABLE_USERNAMES = "Usernames";
     static final private String TABLE_RECORD = "DailyWaterIntake";
+    static final private String TABLE_CUPS = "Cups";
     static private String lastUsername = "";
 
     Context context;
@@ -36,12 +37,20 @@ public class CoreDatabase extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_USERNAMES + " (username TEXT PRIMARY KEY);");
         db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_RECORD + " (DailyWaterIntake TEXT PRIMARY KEY);");
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_CUPS + " (Cups TEXT PRIMARY KEY);");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS `DB_TABLE`");
         onCreate(db);
+    }
+
+    public void insertCups(Double cups) {
+        this.db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("Cups",cups);
+        db.insert(TABLE_CUPS, null, values);
     }
 
     public void insertUsername(String username) {
@@ -53,11 +62,12 @@ public class CoreDatabase extends SQLiteOpenHelper {
         lastUsername = username;
     }
 
-    public void insertRecord(int waterCount) {
+    public void insertRecord(int waterCount, double cups) {
         this.db = this.getWritableDatabase();
         String date = getDateTime();
         ContentValues values = new ContentValues();
         values.put("daily water intake", waterCount);
+        values.put("cups", cups);
         values.put("date", date);
         db.insert(TABLE_RECORD, null, values);
     }
@@ -68,6 +78,17 @@ public class CoreDatabase extends SQLiteOpenHelper {
                 "yyyy-MM-dd", Locale.getDefault());
         Date date = new Date();
         return dateFormat.format(date);
+    }
+
+    public Double getCups(){
+        this.db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_CUPS, null);
+        double cups = 0;
+        if (cursor != null && cursor.moveToFirst()) {
+            int Index = cursor.getColumnIndex("Cups");
+            cups = cursor.getInt(Index);
+        }
+        return cups;
     }
 
 

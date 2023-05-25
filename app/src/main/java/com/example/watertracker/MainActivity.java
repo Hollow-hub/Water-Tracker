@@ -4,7 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
     CoreDatabase db;
     EditText nameInput;
     private String name;
+    private Button nextButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,10 +37,30 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         nameInput = findViewById(R.id.nickname);
         configureNextButton();
-
+        //nameInput.addTextChangedListener(loginTextWatcher);
+        nextButton = findViewById(R.id.loginbtn);
     }
+
+//    private TextWatcher loginTextWatcher = new TextWatcher() {
+//        @Override
+//        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//
+//        }
+//
+//        @Override
+//        public void onTextChanged(CharSequence s, int start, int before, int count) {
+//            String nickname = nameInput.getText().toString().trim();
+//            nextButton.setEnabled(!nickname.isEmpty());
+//        }
+//
+//        @Override
+//        public void afterTextChanged(Editable s) {
+//
+//        }
+//    };
+
     private void configureNextButton(){
-        Button nextButton = findViewById(R.id.loginbtn);
+        nextButton = findViewById(R.id.loginbtn);
         nextButton.setOnClickListener(v -> {
             if (TextUtils.isEmpty(nameInput.getText().toString())){
                 Toast.makeText(MainActivity.this, "Make sure to write a nickname", Toast.LENGTH_LONG).show();
