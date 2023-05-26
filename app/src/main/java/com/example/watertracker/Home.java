@@ -4,18 +4,24 @@ import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.slider.Slider;
 import com.google.android.material.textview.MaterialTextView;
+
+import java.text.DecimalFormat;
 
 public class Home extends AppCompatActivity {
 
@@ -24,6 +30,8 @@ public class Home extends AppCompatActivity {
     TextView username;
     TextView MyStats;
     double cups;
+    Double Cups;
+    Double Litre;
     TextView textView;
     private ProgressBar pb;
     private int CurrentProgress;
@@ -40,7 +48,6 @@ public class Home extends AppCompatActivity {
         username = findViewById(R.id.textViewName);
         username.setText(name);
 
-
         pb = findViewById(R.id.progress_bar);
         Add = findViewById(R.id.add);
 
@@ -48,45 +55,76 @@ public class Home extends AppCompatActivity {
 
         cups = db.getCups();
         textView = findViewById(R.id.textView3);
-        cups = (int)cups;
+        cups = (int) cups;
         textView.setText(String.valueOf((int) cups));
         if (!db.Record_is_empty()){
             CurrentProgress = db.getRecord();
-            pb.setProgress(CurrentProgress);
         }
 
+        pb.setMax((int) cups);  // Set the maximum value of the progress bar
+        pb.setProgress(CurrentProgress);  // Set the progress value
 
         Add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 CurrentProgress = CurrentProgress + 1;
                 pb.setProgress(CurrentProgress);
-                pb.setMax((int) cups);
                 db.insertRecord(CurrentProgress);
-                Intent intent = new Intent(Home.this,Reminder.class);
-                PendingIntent pendingIntent = PendingIntent.getBroadcast(Home.this,0,intent,0);
+
+                //this is where we have the alarm manager for the reminder
+                Intent intent = new Intent(Home.this, Reminder.class);
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(Home.this, 0, intent, 0);
                 AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 
                 long timeAtButtonClick = System.currentTimeMillis();
                 long OneHour = 1000 * 3600;
-                alarmManager.set(AlarmManager.RTC_WAKEUP,timeAtButtonClick + OneHour,pendingIntent);
+                alarmManager.set(AlarmManager.RTC_WAKEUP, timeAtButtonClick + OneHour, pendingIntent);
             }
         });
 
-
-        MyStats = findViewById(R.id.stats);
-        MyStats.setOnClickListener(new View.OnClickListener() {
+        Button openDialogButton = findViewById(R.id.settings);
+        openDialogButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder dialog = new AlertDialog.Builder(Home.this);
-                dialog.setTitle("Current Stats");
-                dialog.setCancelable(true);
-                dialog.show();
+                showSliderDialog();
             }
         });
 
-
     }
+
+    private void showSliderDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.slider, null);
+        Slider weightSlider = dialogView.findViewById(R.id.weight_slider2);
+        Slider activitySlider = dialogView.findViewById(R.id.activity_slider);
+
+        builder.setView(dialogView);
+        builder.setTitle("Change your Weight and Activity level");
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                float weightProgress = weightSlider.getValue();
+                float activityProgress = activitySlider.getValue();
+                Litre = (weightProgress / 30 ) + (activityProgress * 0.35);
+                Cups = (Litre * 4.2);
+                db.insertCups(Cups);
+                DecimalFormat decimalFormat = new DecimalFormat("#");
+                String cupsText = decimalFormat.format(Cups);
+                textView.setText(cupsText);
+                CurrentProgress = 0;
+                db.deleteColumnInputs("DailyWaterIntake","DailyWater");
+                pb.setMax(Cups.intValue());
+                pb.setProgress(CurrentProgress);
+            }
+        });
+        builder.setNegativeButton("Cancel", null);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+
 
     private void createNotificationChannel(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){

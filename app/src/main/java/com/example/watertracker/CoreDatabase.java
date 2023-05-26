@@ -49,6 +49,16 @@ public class CoreDatabase extends SQLiteOpenHelper {
         db.insert(TABLE_CUPS, null, values);
     }
 
+    public void createTable() {
+        this.db = this.getWritableDatabase();
+        String tableName = "DailyWaterIntake";
+        String columnName = "DailyWater";
+        String sql = "CREATE TABLE IF NOT EXISTS " + tableName + " ("
+                + columnName + " TEXT"
+                + ")";
+        db.execSQL(sql);
+    }
+
     public void insertUsername(String username) {
         this.db = this.getWritableDatabase();
         // insert username into database
@@ -62,6 +72,13 @@ public class CoreDatabase extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put("DailyWater", waterCount);
         db.insert(TABLE_RECORD, null, values);
+    }
+
+    public void deleteColumnInputs(String tableName, String columnName) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(columnName, "");
+        db.update(tableName, values, null, null);
     }
 
 
@@ -82,16 +99,23 @@ public class CoreDatabase extends SQLiteOpenHelper {
         return lastItem;
     }
 
-    public Double getCups(){
+    public Double getCups() {
         this.db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_CUPS, null);
+        Cursor cursor = db.rawQuery("SELECT Cups FROM " + TABLE_CUPS + " ORDER BY ROWID DESC LIMIT 1", null);
         double cups = 0;
+
         if (cursor != null && cursor.moveToFirst()) {
-            int Index = cursor.getColumnIndex("Cups");
-            cups = cursor.getInt(Index);
+            int index = cursor.getColumnIndex("Cups");
+            cups = cursor.getDouble(index);
         }
+
+        if (cursor != null) {
+            cursor.close();
+        }
+
         return cups;
     }
+
 
     public boolean Record_is_empty() {
         this.db = this.getReadableDatabase();
