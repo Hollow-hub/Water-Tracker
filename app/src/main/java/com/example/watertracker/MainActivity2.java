@@ -47,6 +47,7 @@ public class MainActivity2 extends AppCompatActivity{
         rangeSliderWeight = findViewById(R.id.Weight_slider);
         rangeSliderActivity = findViewById(R.id.Activity_slider);
 
+        // First Slider for the weight
         rangeSliderWeight.addOnChangeListener(new Slider.OnChangeListener() {
             @Override
             public void onValueChange(@NonNull Slider slider, float value, boolean fromUser) {
@@ -55,6 +56,7 @@ public class MainActivity2 extends AppCompatActivity{
             }
         });
 
+        //Second Slider for the activity level
         rangeSliderActivity.addOnChangeListener(new Slider.OnChangeListener() {
             @Override
             public void onValueChange(@NonNull Slider slider, float value, boolean fromUser) {
@@ -64,13 +66,12 @@ public class MainActivity2 extends AppCompatActivity{
         });
 
         configureNextButton();
-
-
     }
 
     private void configureNextButton(){
         Button nextButton = findViewById(R.id.buttonNext);
         nextButton.setOnClickListener(v -> {
+            //Just some checks for the user
             if ((x | y) == 0){
                 Toast.makeText(MainActivity2.this, "Make sure to put your weight and activity level", Toast.LENGTH_LONG).show();
             }else{

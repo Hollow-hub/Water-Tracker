@@ -78,7 +78,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.868" />
+        app:layout_constraintVertical_bias="1.0" />
 
     <Button
         android:id="@+id/add"
@@ -95,6 +95,23 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.41" />
+
+    <Button
+        android:id="@+id/reset"
+        android:layout_width="88dp"
+        android:layout_height="44dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:backgroundTint="@color/material_on_surface_disabled"
+        android:text="Reset"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.786"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.668" />
 
     <TextView
         android:id="@+id/textView5"
@@ -116,17 +133,18 @@
 
     <TextView
         android:id="@+id/textView6"
-        android:layout_width="153dp"
-        android:layout_height="89dp"
-        android:text="Each ADD click represents a cup of water"
+        android:layout_width="167dp"
+        android:layout_height="106dp"
+        android:text="Click here to reset your progress when you fill the bar"
         android:textAlignment="center"
         android:textSize="20dp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.263"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.697"
+        app:layout_constraintVertical_bias="0.704"
         tools:ignore="MissingConstraints" />
 
     <TextView

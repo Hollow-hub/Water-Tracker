@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -49,16 +50,6 @@ public class CoreDatabase extends SQLiteOpenHelper {
         db.insert(TABLE_CUPS, null, values);
     }
 
-    public void createTable() {
-        this.db = this.getWritableDatabase();
-        String tableName = "DailyWaterIntake";
-        String columnName = "DailyWater";
-        String sql = "CREATE TABLE IF NOT EXISTS " + tableName + " ("
-                + columnName + " TEXT"
-                + ")";
-        db.execSQL(sql);
-    }
-
     public void insertUsername(String username) {
         this.db = this.getWritableDatabase();
         // insert username into database
@@ -72,13 +63,6 @@ public class CoreDatabase extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put("DailyWater", waterCount);
         db.insert(TABLE_RECORD, null, values);
-    }
-
-    public void deleteColumnInputs(String tableName, String columnName) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(columnName, "");
-        db.update(tableName, values, null, null);
     }
 
 

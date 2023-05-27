@@ -37,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         nameInput = findViewById(R.id.nickname);
         configureNextButton();
-        //nameInput.addTextChangedListener(loginTextWatcher);
         nextButton = findViewById(R.id.loginbtn);
     }
 
