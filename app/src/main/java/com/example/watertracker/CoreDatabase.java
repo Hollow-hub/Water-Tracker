@@ -4,16 +4,10 @@ import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
 public class CoreDatabase extends SQLiteOpenHelper {
     static final private String DATABASE_NAME = "WaterTracker.db";
@@ -139,7 +133,7 @@ public class CoreDatabase extends SQLiteOpenHelper {
 
     public String getUsername() {
         this.db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_USERNAMES, null);
+        @SuppressLint("Recycle") Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_USERNAMES, null);
         String name = "";
         if (cursor != null && cursor.moveToFirst()) {
             int usernameIndex = cursor.getColumnIndex("username");

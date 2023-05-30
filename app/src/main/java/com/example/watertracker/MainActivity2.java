@@ -1,24 +1,16 @@
 package com.example.watertracker;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.material.slider.LabelFormatter;
-import com.google.android.material.slider.RangeSlider;
 import com.google.android.material.slider.Slider;
-
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Currency;
 
 public class MainActivity2 extends AppCompatActivity{
 
@@ -33,6 +25,7 @@ public class MainActivity2 extends AppCompatActivity{
     ImageView imageView;
     Drawable drawable;
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,21 +41,15 @@ public class MainActivity2 extends AppCompatActivity{
         rangeSliderActivity = findViewById(R.id.Activity_slider);
 
         // First Slider for the weight
-        rangeSliderWeight.addOnChangeListener(new Slider.OnChangeListener() {
-            @Override
-            public void onValueChange(@NonNull Slider slider, float value, boolean fromUser) {
-                Weight = value;
-                x = 1;
-            }
+        rangeSliderWeight.addOnChangeListener((slider, value, fromUser) -> {
+            Weight = value;
+            x = 1;
         });
 
         //Second Slider for the activity level
-        rangeSliderActivity.addOnChangeListener(new Slider.OnChangeListener() {
-            @Override
-            public void onValueChange(@NonNull Slider slider, float value, boolean fromUser) {
-                Activity = (int)value;
-                y = 1;
-            }
+        rangeSliderActivity.addOnChangeListener((slider, value, fromUser) -> {
+            Activity = (int)value;
+            y = 1;
         });
 
         configureNextButton();
